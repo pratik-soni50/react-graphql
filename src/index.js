@@ -1,12 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
+import ApolloClient from 'apollo-boost';
+import { ApolloProvider } from '@apollo/react-hooks';
 import * as serviceWorker from './serviceWorker';
+
+const client = new ApolloClient({
+  uri: 'http://localhost:4000/graphql',
+});
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <ApolloProvider client={client}>
+      <div>
+        <h2>My first Apollo app 🚀</h2>
+      </div>
+    </ApolloProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );
