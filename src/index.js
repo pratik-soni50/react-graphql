@@ -2,7 +2,14 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ApolloClient from 'apollo-boost';
 import { ApolloProvider } from '@apollo/react-hooks';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { ThemeProvider } from '@material-ui/core/styles';
+
 import * as serviceWorker from './serviceWorker';
+
+import theme from './theme';
+
+import App from './App/index';
 
 const client = new ApolloClient({
   uri: 'http://localhost:4000/graphql',
@@ -11,9 +18,10 @@ const client = new ApolloClient({
 ReactDOM.render(
   <React.StrictMode>
     <ApolloProvider client={client}>
-      <div>
-        <h2>My first Apollo app 🚀</h2>
-      </div>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <App />
+      </ThemeProvider>
     </ApolloProvider>
   </React.StrictMode>,
   document.getElementById('root')
