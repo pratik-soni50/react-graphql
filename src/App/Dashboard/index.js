@@ -10,15 +10,16 @@ const useStyles = makeStyles((theme) => ({
   },
   content: {
     flexGrow: 1,
-    padding: theme.spacing(3),
-    paddingTop: theme.spacing(11),
+    padding: theme.spacing(1),
+    paddingTop: theme.spacing(9),
   },
 }));
 
 export default function Dashboard() {
   const classes = useStyles();
+
   return (
-    <div >
+    <div>
       <HeaderBar />
       <div className={classes.root}>
         <Sidebar />

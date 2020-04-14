@@ -11,6 +11,10 @@ const POSTS = gql`
     comments {
       id
       content
+      author {
+        id
+        name
+      }
     }
     author {
       id
