@@ -1,26 +1,24 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ApolloClient from 'apollo-boost';
 import { ApolloProvider } from '@apollo/react-hooks';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider } from '@material-ui/core/styles';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 import * as serviceWorker from './serviceWorker';
-
 import theme from './theme';
+import client from './utils/CreateClient';
 
 import App from './App/index';
-
-const client = new ApolloClient({
-  uri: 'http://localhost:4000/graphql',
-});
 
 ReactDOM.render(
   <React.StrictMode>
     <ApolloProvider client={client}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <App />
+        <Router>
+          <App />
+        </Router>
       </ThemeProvider>
     </ApolloProvider>
   </React.StrictMode>,

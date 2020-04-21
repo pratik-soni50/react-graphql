@@ -1,5 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import { Switch, Route, Redirect } from "react-router-dom";
 import HeaderBar from './DashboardComponent/Header/index';
 import Sidebar from './DashboardComponent/Sidebar';
 import NewsFeed from './NewsFeed';
@@ -24,7 +25,14 @@ export default function Dashboard() {
       <div className={classes.root}>
         <Sidebar />
         <main className={classes.content}>
-          <NewsFeed />
+          <Switch>
+            <Route path="/dashboard"><NewsFeed /></Route>
+            <Route path="/products">Products</Route>
+            <Route path="/documents">Documents</Route>
+            <Route exact path={`/`}><Redirect to="/dashboard" /></Route>
+            <Route exact path={`/login`}><Redirect to="/dashboard" /></Route>
+            <Route path={`*`}>404</Route>
+          </Switch>
         </main>
       </div>
     </div>

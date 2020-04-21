@@ -2,26 +2,31 @@ import React from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
 import Posts from './Posts/index';
+import NewsFeedForm from './AddEditPostAndComments';
 
 const POSTS = gql`
 {
   posts {
-    id
-    content
-    comments {
+    count
+    list {
       id
       content
       author {
         id
         name
       }
-    }
-    author {
-      id
-      name
+      comments {
+        id
+        content
+        author {
+          id
+          name
+        }
+      }
     }
   }
 }
+
 `;
 
 function NewsFeed() {
@@ -30,7 +35,12 @@ function NewsFeed() {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
 
-  return <Posts posts={data.posts} />
+  return (
+    <React.Fragment>
+      <NewsFeedForm type="post" />
+      <Posts posts={data.posts.list} />
+    </React.Fragment>
+  )
 }
 
 export default NewsFeed;

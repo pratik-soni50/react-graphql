@@ -1,5 +1,6 @@
 import React from 'react';
 import CardContent from '@material-ui/core/CardContent';
+import List from '@material-ui/core/List';
 import Comment from './Comment';
 
 export default function Comments({ comments }) {
@@ -8,9 +9,11 @@ export default function Comments({ comments }) {
       {
         comments && comments.length > 0 &&
         <CardContent>
-          {
-            comments.map(comment => <Comment comment={comment} />)
-          }
+          <List>
+            {
+              comments.map(comment => <Comment key={comment.id} comment={comment} />)
+            }
+          </List>
         </CardContent>
       }
     </React.Fragment>
