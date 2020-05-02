@@ -1,54 +1,45 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Paper, TextField, Button } from '@material-ui/core';
+import { useMutation } from '@apollo/react-hooks';
+import ADD_POST from './CreatePostQuery';
+import updatePostsListOnCreate from './UpdatePostsListOnCreate';
 
 const useStyles = makeStyles((theme) => ({
-  avatar: {
-    textTransform: 'capitalize',
-  },
-  header: {
-    textTransform: 'capitalize',
-  },
+  root: {
+    padding: theme.spacing(2),
+    marginBottom: theme.spacing(1),
+  }
 }));
 
-const addEditPost = (data) => {
-
-};
-
-const addEditComment = (data) => {
-
-};
-
-export default function NewsFeedForm(props) {
+export default function NewsFeedForm({ type = 'post', id = null, oldContent = '' }) {
   const classes = useStyles();
-  const { type, id } = props;
+  const [content, setContent] = useState('');
+  const [addPost, { loading }] = useMutation(ADD_POST, {
+    onCompleted: () => setContent(''),
+    update: updatePostsListOnCreate,
+  });
 
-  const handleSubmit = () => {
-    if (type === 'post') {
-      addEditPost({ id });
-    } else if (type === 'comment') {
-      addEditComment({ id });
-    }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    addPost({
+      variables: { content },
+    });
   }
 
   return (
-    <React.Fragment>
-      <Paper>
-        <form onSubmit={handleSubmit}>
-          <TextField
-            fullWidth
-            multiline
-            rows={4}
-            variant="outlined"
-            label="Add your status"
-          />
-          <Button
-            color="primary"
-            variant="outlined"
-            type="submit"
-          >Post</Button>
-        </form>
-      </Paper>
-    </React.Fragment>
+    <Paper className={classes.root} >
+      <form onSubmit={handleSubmit}>
+        <TextField
+          multiline
+          rows={2}
+          rowsMax={6}
+          placeholder="Add your status"
+          value={content}
+          onChange={e => setContent(e.target.value)}
+        />
+        <Button disabled={loading} type="submit">Post</Button>
+      </form>
+    </Paper>
   );
 }

@@ -4,7 +4,7 @@ import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import Avatar from '@material-ui/core/Avatar';
 
-import Comments from '../Comments';
+import Comments from './Comments';
 
 const useStyles = makeStyles((theme) => ({
   root: {
