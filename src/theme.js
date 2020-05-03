@@ -17,6 +17,11 @@ const theme = createMuiTheme({
         textTransform: 'none',
       },
     },
+    MuiDrawer: {
+      paperAnchorDockedLeft: {
+        borderRightWidth: 0,
+      },
+    },
   },
   props: {
     MuiTextField: {
@@ -27,6 +32,13 @@ const theme = createMuiTheme({
     MuiButton: {
       color: "primary",
       variant: "outlined",
+    },
+    MuiPaper: {
+      elevation: 0,
+      square: true,
+    },
+    MuiCard: {
+      elevation: 0,
     },
   },
 });

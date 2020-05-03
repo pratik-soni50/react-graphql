@@ -1,13 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useQuery } from '@apollo/react-hooks';
+import { makeStyles } from '@material-ui/core/styles';
+import { Button, List } from '@material-ui/core';
 
 import Post from './Post';
 import POSTS from './PostsQuery';
-import { Button } from '@material-ui/core';
 import uniqueArray from '../../../../utils/UniqueArray';
 
+const useStyles = makeStyles((theme) => ({
+  list: {
+    width: '100%',
+    backgroundColor: theme.palette.background.paper,
+  },
+}));
+
 export default function Posts() {
-  const { loading, error, data, fetchMore } = useQuery(POSTS, { variables: { page: 1 } });
+  const classes = useStyles();
+  const { loading, error, data, fetchMore } = useQuery(POSTS, {
+    variables: { page: 1 },
+  });
   const [page, setPage] = useState(1);
   const pagination = () => {
     fetchMore({
@@ -20,17 +31,16 @@ export default function Posts() {
     });
   }
 
-  if (loading) {
-    return <p>Loading...</p>;
-  }
   if (error) {
     return <p>Error :(</p>;
   }
 
   return (
     <React.Fragment>
-      {data.posts.list.map((post) => <Post key={post.id} post={post} />)}
-      <Button onClick={pagination}>Fetch More</Button>
+      {!loading
+        && <List className={classes.list}>{data.posts.list.map((post) => <Post key={post.id} post={post} />)}</List>}
+      {loading && <p>Loading...</p>}
+      <Button disabled={loading} onClick={pagination}>Fetch More</Button>
     </React.Fragment>
   )
 }

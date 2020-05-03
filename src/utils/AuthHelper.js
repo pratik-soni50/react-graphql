@@ -25,6 +25,24 @@ export function isLoggedIn() {
   }
 }
 
+export function getCurrentUser() {
+  try {
+    const token = window.localStorage.getItem('token');
+    const decoded = token && decode(token);
+    const user = decoded.data;
+    if (user && user.id && user.email) {
+      return user;
+    }
+    return false;
+  } catch (e) {
+    return false;
+  }
+}
+
+export function logout() {
+  window.localStorage.clear();
+}
+
 export function setToken(token) {
-  return window.localStorage.setItem('token', token);
+  window.localStorage.setItem('token', token);
 }
