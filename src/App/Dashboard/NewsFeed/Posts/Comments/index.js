@@ -1,21 +1,40 @@
 import React from 'react';
 import CardContent from '@material-ui/core/CardContent';
-import List from '@material-ui/core/List';
+import { Avatar, ListItem, List, ListItemAvatar, ListItemText, Typography, Divider, IconButton } from '@material-ui/core';
+// import List from '@material-ui/core/List';
 import Comment from './Comment';
+import NewsFeedForm from '../../AddEditPostAndComments';
 
-export default function Comments({ comments }) {
+import useCurrentUser from '../../../../../Hooks/CurrentUser';
+
+export default function Comments({ comments, postID }) {
+  const currentUser = useCurrentUser();
   return (
-    <React.Fragment>
+    <List>
       {
         comments && comments.length > 0 &&
-        <CardContent>
-          <List>
-            {
-              comments.map(comment => <Comment key={comment.id} comment={comment} />)
-            }
-          </List>
-        </CardContent>
+        comments.map(comment => <Comment key={comment.id} comment={comment} />)
       }
-    </React.Fragment>
+      <ListItem alignItems="flex-start">
+        <ListItemAvatar>
+          <Avatar
+            // className={classes.avatar}
+            aria-label={currentUser.name}>{currentUser.name && currentUser.name.charAt(0)}</Avatar>
+        </ListItemAvatar>
+        <ListItemText
+          secondary={
+            <React.Fragment>
+              <NewsFeedForm inList
+              type="comment"
+              postID={postID}
+              />
+            </React.Fragment>
+          }
+          secondaryTypographyProps={{
+            component: 'div',
+          }}
+        />
+      </ListItem>
+    </List>
   )
 }

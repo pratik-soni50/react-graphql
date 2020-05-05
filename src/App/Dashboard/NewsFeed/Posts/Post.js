@@ -12,9 +12,6 @@ const useStyles = makeStyles((theme) => ({
   root: {
     marginBottom: theme.spacing(1),
   },
-  avatar: {
-    textTransform: 'capitalize',
-  },
   inline: {
     display: 'inline',
   },
@@ -28,13 +25,12 @@ export default function Post({ post }) {
   const classes = useStyles();
   const currentUser = useCurrentUser();
   const [isEditMode, setEditMode] = useState(false);
-  
+
   return (
     <React.Fragment>
       <ListItem alignItems="flex-start">
         <ListItemAvatar>
           <Avatar
-            className={classes.avatar}
             aria-label={post.author.name}>{post.author.name && post.author.name.charAt(0)}</Avatar>
         </ListItemAvatar>
         <ListItemText
@@ -56,10 +52,10 @@ export default function Post({ post }) {
               </span>
               {post.author.id === currentUser.id
                 && <span>
-                  <IconButton onClick={() => {setEditMode(true)}}
-                  aria-label="delete" color="primary" 
-                  className={classes.margin} size="small"
-                  disabled={isEditMode}>
+                  <IconButton onClick={() => { setEditMode(true) }}
+                    aria-label="delete" color="primary"
+                    className={classes.margin} size="small"
+                    disabled={isEditMode}>
                     <EditIcon fontSize="inherit" />
                   </IconButton>
                   <IconButton aria-label="delete" color="secondary" className={classes.margin} size="small">
@@ -70,17 +66,23 @@ export default function Post({ post }) {
           }
           secondary={
             <React.Fragment>
-              {isEditMode ? <NewsFeedForm id={post.id} 
-              oldContent={post.content} 
-              cancelEdit={() => {
-                setEditMode(false);
-              }}
-              /> : <Typography
-                component="span"
-                variant="body2"
-                className={classes.inline}
-                color="textPrimary"
-              >{post.content}</Typography>}
+              {isEditMode ? <NewsFeedForm
+                id={post.id}
+                oldContent={post.content}
+                inList
+                cancelEdit={() => {
+                  setEditMode(false);
+                }}
+              /> : <React.Fragment>
+                  <Typography
+                    component="span"
+                    variant="body2"
+                    className={classes.inline}
+                    color="textPrimary"
+                  >{post.content}</Typography>
+                  <Comments comments={post.comments} postID={post.id} />
+                </React.Fragment>
+              }
             </React.Fragment>
           }
           secondaryTypographyProps={{

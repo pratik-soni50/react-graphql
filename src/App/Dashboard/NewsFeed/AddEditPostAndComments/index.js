@@ -4,6 +4,7 @@ import { Paper, TextField, Button } from '@material-ui/core';
 import { useMutation } from '@apollo/react-hooks';
 import ADD_POST from './CreatePostQuery';
 import UPDATE_POST from './UpdatePostQuery';
+import CREATE_COMMENT from './CreateCommentQuery';
 import updatePostsListOnCreate from './UpdatePostsListOnCreate';
 
 const useStyles = makeStyles((theme) => ({
@@ -13,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function NewsFeedForm({ type = 'post', id = '', oldContent = '', cancelEdit }) {
+export default function NewsFeedForm({ type = 'post', postID = '', id = '', oldContent = '', cancelEdit, inList = false }) {
   const classes = useStyles();
   const [content, setContent] = useState('');
   const [addPost, { loading }] = useMutation(ADD_POST, {
@@ -24,19 +25,27 @@ export default function NewsFeedForm({ type = 'post', id = '', oldContent = '', 
     onCompleted: () => cancelEdit && cancelEdit(),
   });
 
+  const [addComment, { loading: addCommentLoading }] = useMutation(CREATE_COMMENT, {
+    onCompleted: () => setContent(''),
+  });
+
   useEffect(() => {
     id && setContent(oldContent);
   }, [oldContent]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    id
-      ? updatePost({ variables: { id, content } })
-      : addPost({ variables: { content } });
+    if (type === 'post') {
+      id
+        ? updatePost({ variables: { id, content } })
+        : addPost({ variables: { content } });
+    } else if (type === 'comment' && postID) {
+      addComment({ variables: {post: postID, content} })
+    }
   }
 
   return (
-    <Paper className={`${id ? '' : classes.root}`}>
+    <Paper className={`${inList ? '' : classes.root}`}>
       <form onSubmit={handleSubmit}>
         <TextField
           multiline
@@ -46,7 +55,7 @@ export default function NewsFeedForm({ type = 'post', id = '', oldContent = '', 
           value={content}
           onChange={e => setContent(e.target.value)}
         />
-        <Button disabled={loading || updateLoading} type="submit">{id ? 'Update' : 'Post'}</Button>
+        <Button disabled={loading || updateLoading || addCommentLoading} type="submit">{id ? 'Update' : 'Post'}</Button>
         {id && cancelEdit && <Button type="button" color="secondary" onClick={cancelEdit}>Cancel Edit</Button>}
       </form>
     </Paper>

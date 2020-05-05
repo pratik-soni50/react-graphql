@@ -22,6 +22,11 @@ const theme = createMuiTheme({
         borderRightWidth: 0,
       },
     },
+    MuiAvatar: {
+      root: {
+        textTransform: 'capitalize',
+      }
+    },
   },
   props: {
     MuiTextField: {
